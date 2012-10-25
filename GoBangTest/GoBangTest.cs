@@ -13,10 +13,10 @@ namespace GoBangTest
         [TestMethod]
         public void PrintEmptyChessBoard()
         {
-            Board chessBoard = new Board() ;
+            Board chessBoard = new Board(8) ;
             string expected = "********\n********\n********\n********\n********\n********\n********\n********\n";  
 
-            Assert.AreEqual(expected,chessBoard.boardStatus);
+            Assert.AreEqual(expected,chessBoard.BoardStatus);
         }
     }
 }
