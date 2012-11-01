@@ -1,48 +1,41 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace ConsoleApplication1
+namespace GoBang
 {
     public class Board
     {
-        public string BoardStatus
+        public int[,] BoardStatus
         {
-            get { return GetBoardStatus(); }
+            get { return _cells; }
         }
 
-        private char[,] _cells;
+
+        private int[,] _cells;
         private int _boardSize;
 
         public Board(int boardSize)
         {
             _boardSize = boardSize;
-            _cells = new char[boardSize,boardSize];
-            for (int i = 0; i < _boardSize; i++)
+            _cells = CreateAndInitBoardStatus(_boardSize);
+        }
+
+        public static int[,] CreateAndInitBoardStatus(int boardSize)
+        {
+            var boardStatus = new int[boardSize,boardSize];
+            for (int i = 0; i < boardSize; i++)
             {
-                for (int j = 0; j < _boardSize; j++)
+                for (int j = 0; j < boardSize; j++)
                 {
-                    _cells[i,j] ='*';
+                    boardStatus[i, j] = 0;
                 }
-            }                                                                                      
+            }
+            return boardStatus;
         }
 
         public void PlacePiece(Point point)
         {
-            _cells[point.X, point.Y] = 'X';
-        }
-
-        private string GetBoardStatus()
-        {
-            string boardStatus = string.Empty;
-            for (int i = 0; i < _boardSize; i++)
-            {
-                for (int j = 0; j < _boardSize; j++)
-                {
-                    boardStatus += _cells[i, j];
-                }
-                boardStatus += "\n";
-            }
-            return boardStatus;
+            _cells[point.X, point.Y] = 1;
         }
     }
 }

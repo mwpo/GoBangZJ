@@ -1,9 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using ConsoleApplication1;
+﻿using System.Drawing;
+using GoBang;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GoBangTest
@@ -12,23 +8,47 @@ namespace GoBangTest
     public class GoBangTest
     {
         [TestMethod]
-        public void PrintEmptyChessBoard()
+        public void PrintChessBoard_Given_Place_ON_1_2()
         {
-            Board chessBoard = new Board(8) ;
-            string expected = "********\n********\n********\n********\n********\n********\n********\n********\n";  
-
-            Assert.AreEqual(expected,chessBoard.BoardStatus);
+            int boardSize = 8;
+            var expectedResults = Board.CreateAndInitBoardStatus(boardSize);
+            expectedResults[1, 2] = 1;
+            Board chessBoard = new Board(boardSize);
+            Point p = new Point(1, 2);
+            chessBoard.PlacePiece(p);
+            Assert.IsTrue(expectedResults.TwoDimArrayEqual(expectedResults, chessBoard.BoardStatus));
         }
 
         [TestMethod]
-        public void PrintChessBoard_Given_Place_ON_1_2()
+        public void PrintEmptyChessBoard()
         {
-            Board chessBoard = new Board(8);
-            Point p = new Point(1,2);
-            chessBoard.PlacePiece(p);
-            string expected = "********\n**X*****\n********\n********\n********\n********\n********\n********\n";
-
-            Assert.AreEqual(expected, chessBoard.BoardStatus);
+            int boardSize = 8;
+           var expectedResults = Board.CreateAndInitBoardStatus(boardSize);
+            Board chessBoard = new Board(boardSize);
+            Assert.IsTrue(expectedResults.TwoDimArrayEqual(expectedResults, chessBoard.BoardStatus));
         }
+    }
+
+    static class Extension
+    {
+            public static bool TwoDimArrayEqual(this int[,] X, int[,] a, int[,] b)
+            {
+                if (a.Rank != b.Rank || a.Rank != 2)
+                    return false;
+
+                for (int i = 0; i < a.Rank; i++)
+                    if (a.GetLength(i) != b.GetLength(i))
+                        return false;
+
+                for (int i = 0; i < a.GetLength(0); i++)
+                {
+                    for(int j = 0; j<a.GetLength(1); j++ )
+                    {
+                        if (a[i, j] != b[i, j])
+                            return false;
+                    }
+                }
+                return true;
+            }
     }
 }
