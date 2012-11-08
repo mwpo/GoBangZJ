@@ -42,13 +42,6 @@ namespace GoBangTest
         private int[,] PopulateExpectedBoardStatus(int boardSize, params Point[] points)
         {
             var boardStatus = new int[boardSize, boardSize];
-            for (int i = 0; i < boardSize; i++)
-            {
-                for (int j = 0; j < boardSize; j++)
-                {
-                    boardStatus[i, j] = 0;
-                }
-            }
             foreach (var point in points)
             {
                 boardStatus[point.X, point.Y] = 1;

@@ -6,32 +6,11 @@ namespace GoBang
 {
     public class Board
     {
-        public int[,] BoardStatus
-        {
-            get { return _cells; }
-        }
-
-
-        private int[,] _cells;
-        private int _boardSize;
+        private readonly int[,] _cells;
 
         public Board(int boardSize)
         {
-            _boardSize = boardSize;
-            _cells = CreateAndInitBoardStatus(_boardSize);
-        }
-
-        public static int[,] CreateAndInitBoardStatus(int boardSize)
-        {
-            var boardStatus = new int[boardSize,boardSize];
-            for (int i = 0; i < boardSize; i++)
-            {
-                for (int j = 0; j < boardSize; j++)
-                {
-                    boardStatus[i, j] = 0;
-                }
-            }
-            return boardStatus;
+            _cells = new int[boardSize,boardSize];
         }
 
         public void PlacePiece(Point point)
@@ -39,6 +18,11 @@ namespace GoBang
             if (_cells[point.X, point.Y] != 0)
                 throw new BoardSquareOccupiedException();
             _cells[point.X, point.Y] = 1;
+        }
+
+        internal int[,] BoardStatus
+        {
+            get { return _cells; }
         }
     }
 }
