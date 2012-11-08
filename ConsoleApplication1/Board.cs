@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using ConsoleApplication1;
 
 namespace GoBang
 {
@@ -35,6 +36,8 @@ namespace GoBang
 
         public void PlacePiece(Point point)
         {
+            if (_cells[point.X, point.Y] != 0)
+                throw new BoardSquareOccupiedException();
             _cells[point.X, point.Y] = 1;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using ConsoleApplication1;
 using GoBang;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,48 +8,52 @@ namespace GoBangTest
     [TestClass]
     public class GoBangTest
     {
+        private readonly Board _sut = new Board(BoardSize);
+        private readonly Point _point_1_2 = new Point(1, 2);
+
+        private const int BoardSize = 8;
+
         [TestMethod]
-        public void PrintChessBoard_Given_Place_ON_1_2()
+        public void Given_Place_Piece_At_1_2_Should_Be_Successful()
         {
-            int boardSize = 8;
-            var expectedResults = Board.CreateAndInitBoardStatus(boardSize);
-            expectedResults[1, 2] = 1;
-            Board chessBoard = new Board(boardSize);
-            Point p = new Point(1, 2);
-            chessBoard.PlacePiece(p);
-            Assert.IsTrue(expectedResults.TwoDimArrayEqual(expectedResults, chessBoard.BoardStatus));
+            var expectedResults = PopulateExpectedBoardStatus(BoardSize, _point_1_2);
+
+            _sut.PlacePiece(_point_1_2);
+
+            Assert.IsTrue(expectedResults.TwoDimArrayEqual(expectedResults, _sut.BoardStatus));
         }
 
         [TestMethod]
-        public void PrintEmptyChessBoard()
+        public void Initial_Board_Status_Should_Be_Empty()
         {
-            int boardSize = 8;
-           var expectedResults = Board.CreateAndInitBoardStatus(boardSize);
-            Board chessBoard = new Board(boardSize);
-            Assert.IsTrue(expectedResults.TwoDimArrayEqual(expectedResults, chessBoard.BoardStatus));
-        }
-    }
+            var expectedResults = PopulateExpectedBoardStatus(BoardSize);
 
-    static class Extension
-    {
-            public static bool TwoDimArrayEqual(this int[,] X, int[,] a, int[,] b)
+            Assert.IsTrue(expectedResults.TwoDimArrayEqual(expectedResults, _sut.BoardStatus));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof (BoardSquareOccupiedException))]
+        public void Given_Place_Two_Pieces_On_the_Same_Place_Should_Throw_Exception()
+        {
+            _sut.PlacePiece(_point_1_2);
+            _sut.PlacePiece(_point_1_2);
+        }
+
+        private int[,] PopulateExpectedBoardStatus(int boardSize, params Point[] points)
+        {
+            var boardStatus = new int[boardSize, boardSize];
+            for (int i = 0; i < boardSize; i++)
             {
-                if (a.Rank != b.Rank || a.Rank != 2)
-                    return false;
-
-                for (int i = 0; i < a.Rank; i++)
-                    if (a.GetLength(i) != b.GetLength(i))
-                        return false;
-
-                for (int i = 0; i < a.GetLength(0); i++)
+                for (int j = 0; j < boardSize; j++)
                 {
-                    for(int j = 0; j<a.GetLength(1); j++ )
-                    {
-                        if (a[i, j] != b[i, j])
-                            return false;
-                    }
+                    boardStatus[i, j] = 0;
                 }
-                return true;
             }
+            foreach (var point in points)
+            {
+                boardStatus[point.X, point.Y] = 1;
+            }
+            return boardStatus;
+        }
     }
 }
