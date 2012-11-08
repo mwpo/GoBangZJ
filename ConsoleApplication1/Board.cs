@@ -7,22 +7,24 @@ namespace GoBang
     public class Board
     {
         private readonly int[,] _cells;
+        private Matrix<int> _matrix;
 
         public Board(int boardSize)
         {
             _cells = new int[boardSize,boardSize];
+            _matrix = new Matrix<int>(boardSize);
         }
 
         public void PlacePiece(Point point)
         {
-            if (_cells[point.X, point.Y] != 0)
+            if (_matrix[point] != 0)
                 throw new BoardSquareOccupiedException();
-            _cells[point.X, point.Y] = 1;
+            _matrix[point] = 1;
         }
 
         internal int[,] BoardStatus
         {
-            get { return _cells; }
+            get { return _matrix.ToArray(); }
         }
     }
 }
